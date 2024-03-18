@@ -1,4 +1,4 @@
-# moodle-docker
+# Moodle on Docker on Ubuntu
 
 ## Install Docker Engine and Docker Compose
 
