@@ -1,0 +1,36 @@
+version: '2'
+services:
+  mariadb:
+    image: docker.io/bitnami/mariadb:11.2
+    environment:
+      - MARIADB_USER=moodle
+      - MARIADB_ROOT_PASSWORD=SUPER_SECURE_THING
+      - MARIADB_PASSWORD=SUPER_SECURE_THING
+      - MARIADB_DATABASE=moodle
+      - MARIADB_CHARACTER_SET=utf8mb4
+      - MARIADB_COLLATE=utf8mb4_unicode_ci
+    volumes:
+      - 'db:/bitnami/mariadb'
+    restart: always
+  moodle:
+    image: docker.io/bitnami/moodle:4.3
+    ports:
+      - '80:8080'
+      - '443:8443'
+    environment:
+      - MOODLE_DATABASE_HOST=mariadb
+      - MOODLE_DATABASE_PORT_NUMBER=3306
+      - MOODLE_DATABASE_USER=moodle
+      - MOODLE_DATABASE_NAME=moodle
+      - MOODLE_DATABASE_PASSWORD=SUPER_SECURE_THING
+    volumes:
+      - 'app:/bitnami/moodle'
+      - 'moodledata:/bitnami/moodledata'
+      - './php.ini:/opt/bitnami/php/etc/php.ini'
+    depends_on:
+      - mariadb
+    restart: always
+volumes:
+  db:
+  app:
+  moodledata:
